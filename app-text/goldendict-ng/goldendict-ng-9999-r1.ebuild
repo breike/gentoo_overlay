@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -55,22 +55,22 @@ BDEPEND="
 
 src_prepare() {
 	# disable git
-	sed -i -e '/git describe/s/^/#/' ${PN}.pro || die
+	sed -i -e '/git describe/s/^/#/' goldendict.pro || die
 
 	# fix installation path
-	sed -i -e '/PREFIX = /s:/usr/local:/usr:' ${PN}.pro || die
+	sed -i -e '/PREFIX = /s:/usr/local:/usr:' goldendict.pro || die
 
 	# add trailing semicolon
-	sed -i -e '/^Categories/s/$/;/' redist/org.${PN}.GoldenDict.desktop || die
+	sed -i -e '/^Categories/s/$/;/' redist/org.goldendict.GoldenDict.desktop || die
 
-	echo "QMAKE_CXXFLAGS_RELEASE = $CXXFLAGS" >> ${PN}.pro
-	echo "QMAKE_CFLAGS_RELEASE = $CFLAGS" >> ${PN}.pro
+	echo "QMAKE_CXXFLAGS_RELEASE = $CXXFLAGS" >> goldendict.pro
+	echo "QMAKE_CFLAGS_RELEASE = $CFLAGS" >> goldendict.pro
 
 	local loc_dir="${S}/locale"
 	plocale_find_changes "${loc_dir}" "" ".ts"
 	rm_loc() {
 		rm -vf "locale/${1}.ts" || die
-		sed -i "/${1}.ts/d" ${PN}.pro || die
+		sed -i "/${1}.ts/d" goldendict.pro || die
 	}
 	plocale_for_each_disabled_locale rm_loc
 
@@ -89,21 +89,20 @@ src_configure() {
 	fi
 
 	myconf+=( CONFIG+=no_qtmultimedia_player )
-	eqmake5 "${myconf[@]}" ${PN}.pro
+	eqmake5 "${myconf[@]}" goldendict.pro
 }
 
 install_locale() {
-	insinto /usr/share/apps/${PN}/locale
+	insinto /usr/share/apps/goldendict/locale
 	doins "${S}"/.qm/${1}.qm
 	eend $? || die "failed to install $1 locale"
 }
 
 src_install() {
-	dobin ${PN}
-	domenu redist/org.${PN}.GoldenDict.desktop
-	doicon redist/icons/${PN}.png
+	dobin goldendict
+	domenu redist/org.goldendict.GoldenDict.desktop
+	doicon redist/icons/goldendict.png
 
-	insinto /usr/share/${PN}/help
-	doins help/gdhelp_en.qch
+	insinto /usr/share/goldendict/help
 	plocale_for_each_locale install_locale
 }
