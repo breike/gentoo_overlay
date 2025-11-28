@@ -23,7 +23,7 @@ DEPEND="
 src_install() {
 	mkdir -p "${D}/usr/bin/"
 	mkdir -p "${D}/etc/init.d/"
-	cp "${S}/gentoo_remapper.py" "${D}/usr/bin/"
-	cp "${S}/gentoo_remapper" "${D}/etc/init.d/gentoo_remapper"
-	chmod +x "${D}/init.d/gentoo_remapper"
+	cp "${S}/thinkpad_remapper.py" "${D}/usr/bin/"
+	cp "${S}/thinkpad_remapper" "${D}/etc/init.d/thinkpad_remapper"
+	chmod +x "${D}/init.d/thinkpad_remapper"
 }
